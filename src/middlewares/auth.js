@@ -18,4 +18,13 @@ const verifyToken = (req, res, next) => {
     }
 };
 
-module.exports = { verifyToken };
+const isAdmin = (req, res, next) => {
+    // Asumiendo que al hacer login guardaremos el rol del usuario en el token
+    if (req.user && req.user.role === 'admin') {
+        next();
+    } else {
+        res.status(403).json({ success: false, message: 'Acceso denegado. Se requieren permisos de administrador.' });
+    }
+};
+
+module.exports = { verifyToken, isAdmin };
