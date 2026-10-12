@@ -17,6 +17,12 @@ app.get('/', (req, res) => {
     res.json({ message: 'Bienvenido a la API de la Plataforma de Cursos' });
 });
 
+// Importar rutas
+const categoryRoutes = require('./routes/category.routes');
+
+// Usar rutas
+app.use('/api/categories', categoryRoutes);
+
 // Middleware centralizado de manejo de errores (Tu tarea)
 app.use((err, req, res, next) => {
     console.error(err.stack);
