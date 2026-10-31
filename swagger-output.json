@@ -1,0 +1,1397 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Plataforma de Cursos API REST",
+    "description": "Documentación REST generada con swagger-autogen y visualizada con Swagger UI Express.",
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor local"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Health"
+    },
+    {
+      "name": "Autenticación"
+    },
+    {
+      "name": "Usuarios"
+    },
+    {
+      "name": "Categorías"
+    },
+    {
+      "name": "Cursos"
+    },
+    {
+      "name": "Notificaciones"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "CategoryInput": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CourseInput": {
+        "type": "object",
+        "required": [
+          "title",
+          "price",
+          "category_id"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "minimum": 0
+          },
+          "category_id": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Comprobar estado del servidor",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Autenticación"
+        ],
+        "summary": "Iniciar sesión",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Registrar usuario y enviar confirmación",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 12
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Listar usuarios (administrador)",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/verify-email": {
+      "get": {
+        "tags": [
+          "Autenticación"
+        ],
+        "summary": "Confirmar correo con token en enlace",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Autenticación"
+        ],
+        "summary": "Confirmar correo con token",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Autenticación"
+        ],
+        "summary": "Solicitar recuperación de contraseña",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/reset-password": {
+      "post": {
+        "tags": [
+          "Autenticación"
+        ],
+        "summary": "Establecer nueva contraseña",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "password"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 12
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Consultar perfil",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Actualizar nombre o correo del perfil",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{id}": {
+      "delete": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Eliminar usuario (administrador)",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/categories": {
+      "get": {
+        "tags": [
+          "Categorías"
+        ],
+        "summary": "Listar categorías",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Categorías"
+        ],
+        "summary": "Crear categoría (administrador)",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/categories/search": {
+      "get": {
+        "tags": [
+          "Categorías"
+        ],
+        "summary": "Buscar categorías",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/categories/{id}": {
+      "get": {
+        "tags": [
+          "Categorías"
+        ],
+        "summary": "Consultar categoría",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Categorías"
+        ],
+        "summary": "Actualizar categoría (administrador)",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryInput"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Categorías"
+        ],
+        "summary": "Eliminar categoría (administrador)",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/courses": {
+      "get": {
+        "tags": [
+          "Cursos"
+        ],
+        "summary": "Listar cursos",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Cursos"
+        ],
+        "summary": "Crear curso (administrador o instructor)",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourseInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/courses/search": {
+      "get": {
+        "tags": [
+          "Cursos"
+        ],
+        "summary": "Buscar y filtrar cursos",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category_id",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "min_price",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_price",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/courses/{id}": {
+      "get": {
+        "tags": [
+          "Cursos"
+        ],
+        "summary": "Consultar curso",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Cursos"
+        ],
+        "summary": "Actualizar curso (administrador o creador)",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "category_id": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Cursos"
+        ],
+        "summary": "Eliminar curso (administrador o creador)",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/notifications/email": {
+      "post": {
+        "tags": [
+          "Notificaciones"
+        ],
+        "summary": "Enviar notificación informativa al correo del usuario autenticado",
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "subject",
+                  "message"
+                ],
+                "properties": {
+                  "subject": {
+                    "type": "string",
+                    "maxLength": 150
+                  },
+                  "message": {
+                    "type": "string",
+                    "maxLength": 2000
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/resend-verification": {
+      "post": {
+        "tags": [
+          "Autenticación"
+        ],
+        "summary": "Solicitar un nuevo enlace de confirmación",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operación completada correctamente."
+          },
+          "201": {
+            "description": "Recurso creado correctamente."
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos."
+          },
+          "401": {
+            "description": "Autenticación requerida o token inválido."
+          },
+          "403": {
+            "description": "El usuario no tiene permisos o debe confirmar su correo."
+          },
+          "404": {
+            "description": "Recurso no encontrado."
+          },
+          "409": {
+            "description": "Conflicto: registro duplicado o relación existente."
+          },
+          "429": {
+            "description": "Límite de solicitudes alcanzado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        }
+      }
+    }
+  }
+}

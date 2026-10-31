@@ -6,7 +6,8 @@ const {
     obtenerCategoriaPorId, 
     crearCategoria, 
     actualizarCategoria, 
-    eliminarCategoria 
+    eliminarCategoria,
+    buscarCategoria
 } = require('../queries/Categoria');
 const categoryController = {};
 
@@ -122,10 +123,10 @@ categoryController.deleteCategoryGraph = async (req, res, next) => {
     } catch (error) { next(error); }
 };
 
-categoryController.searchCategoriesGraph = async (req, res, next) => {
+categoryController.searchCategoryGraph = async (req, res, next) => {
     try {
-        const { keyword } = req.query;
-        const data = await consultarGraphQL(buscarCategoria, { keyword });
+        const { q } = req.query; 
+        const data = await consultarGraphQL(buscarCategoria, { keyword: `%${q}%` });
         const categorias = data.categoriesCollection.edges.map(edge => edge.node);
         res.status(200).json({ success: true, data: categorias });
     } catch (error) { next(error); }
