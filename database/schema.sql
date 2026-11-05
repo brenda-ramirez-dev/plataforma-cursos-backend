@@ -10,6 +10,7 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     role VARCHAR(20) NOT NULL DEFAULT 'student'
         CHECK (role IN ('admin', 'instructor', 'student')),
+	email_verified_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -45,3 +46,22 @@ CREATE INDEX idx_courses_category_id
 
 CREATE INDEX idx_courses_created_by
     ON courses(created_by);
+
+-- Tokens de confirmación de correo y recuperación de contraseña.
+CREATE TABLE user_action_tokens (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id INTEGER NOT NULL
+        REFERENCES users(id) ON DELETE CASCADE,
+    token_hash CHAR(64) NOT NULL UNIQUE,
+    purpose VARCHAR(30) NOT NULL
+        CHECK (purpose IN ('verify_email', 'reset_password')),
+    expires_at TIMESTAMPTZ NOT NULL,
+    used_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_user_action_tokens_user_purpose
+    ON user_action_tokens(user_id, purpose);
+
+CREATE INDEX idx_user_action_tokens_expires
+    ON user_action_tokens(expires_at);

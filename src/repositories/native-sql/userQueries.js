@@ -15,7 +15,8 @@ function createUserQueries(pool) {
       }
 
       const { rows } = await pool.query(
-        `SELECT id, name, email, password_hash, role
+        `SELECT id, name, email, password_hash, role,
+		email_verified_at
          FROM users
          WHERE LOWER(email) = $1
          LIMIT 1`,

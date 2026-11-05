@@ -39,6 +39,11 @@ module.exports = (sequelize) => {
           isIn: [['admin', 'instructor', 'student']],
         },
       },
+	emailVerifiedAt: {
+	 type: DataTypes.DATE,
+	  allowNull: true,
+	  field: 'email_verified_at',
+	},
     },
     {
       tableName: 'users',
