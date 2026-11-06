@@ -1,0 +1,9 @@
+Agregar en src/server.js junto a la importación de categoryRoutes:
+
+const courseRoutes = require('./routes/course.routes');
+
+Y junto a los app.use de rutas:
+
+app.use('/api/courses', courseRoutes);
+
+No reemplazar todo el server.js: solo agregar estas dos líneas en sus secciones correspondientes.

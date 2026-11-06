@@ -30,8 +30,14 @@ async function createAdmin() {
     const passwordHash = await argon2.hash(ADMIN_PASSWORD);
 
     const { rows } = await pool.query(
-      `INSERT INTO users (name, email, password_hash, role)
-       VALUES ($1, $2, $3, 'admin')
+      `INSERT INTO users (
+	 name,
+	 email,
+	 password_hash,
+	 role,
+	 email_verified_at
+	)
+       VALUES ($1, $2, $3, 'admin', CURRENT_TIMESTAMP)
        ON CONFLICT DO NOTHING
        RETURNING id, name, email, role`,
       [ADMIN_NAME, email, passwordHash]
